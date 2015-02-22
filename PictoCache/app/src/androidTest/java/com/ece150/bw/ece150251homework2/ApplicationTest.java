@@ -1,4 +1,4 @@
-package com.ece150.teampictocache.pictocache;
+package com.ece150.bw.ece150251homework2;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
