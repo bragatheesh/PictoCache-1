@@ -1,27 +1,17 @@
 package com.ece150.bw.ece150251homework2;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PointF;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.media.FaceDetector;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -78,13 +68,12 @@ public class MainActivity extends Activity {
                             }
                             else{ gps.showSettingsAlert(); }
 
-                            captureButton.setText("Show Preview");
+                            captureButton.setText("Go Back");
                         }
 
                         //change to Preview mode
-                        else if(captureButton.getText()=="Show Preview") {
-                            theCamera.startPreview();
-                            captureButton.setText("Take Picture");
+                        else if(captureButton.getText() == "Go Back") {
+                            finish();
                         }
                     }
                 }
