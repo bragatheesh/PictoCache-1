@@ -69,6 +69,7 @@ public class MainActivity extends Activity {
                             // get an image from the camera
                             theCamera.takePicture(null, null, takenPicture);
 
+                            //get the GPS coordinates
                             gps = new GPSLocation(MainActivity.this);
                             if (gps.canGetLocation()){
                                 double latitude = gps.getLatitude();
