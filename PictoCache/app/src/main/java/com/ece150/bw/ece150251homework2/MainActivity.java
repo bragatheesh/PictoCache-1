@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+import java.io.OutputStreamWriter;
 
 public class MainActivity extends Activity {
     private Camera theCamera;
@@ -21,6 +22,7 @@ public class MainActivity extends Activity {
     FrameLayout preview;
     ImageView picCaptured;
     CameraPreview viewFinder;
+    private final static String STORETEXT="coordinates.txt";
 
     GPSLocation gps;
 
@@ -66,6 +68,16 @@ public class MainActivity extends Activity {
                                 //get current coordinates
                                 double latitude = gps.getLatitude();
                                 double longitude = gps.getLongitude();
+
+                                try {
+                                    OutputStreamWriter out = new OutputStreamWriter(openFileOutput(STORETEXT, 0));
+
+                                    out.write(String.valueOf(latitude) + String.valueOf(longitude));
+                                    out.close();
+                                }
+                                catch (Throwable t) {
+                                    Toast.makeText(getApplicationContext(), "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
+                                }
 
                                 double SPMinLat = 34.4118550;
                                 double SPMaxLat = 34.4127620;
