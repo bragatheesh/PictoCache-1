@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
 
         // Create an instance of Camera
         theCamera = getCameraInstance();
+        //gps = new GPSLocation(MainActivity.this);
 
         //auto focus
         Camera.Parameters params = theCamera.getParameters();
@@ -59,21 +60,80 @@ public class MainActivity extends Activity {
                             // get an image from the camera
                             theCamera.takePicture(null, null, takenPicture);
 
+                            //get GPS coordinates
                             gps = new GPSLocation(MainActivity.this);
                             if (gps.canGetLocation()){
+                                //get current coordinates
                                 double latitude = gps.getLatitude();
                                 double longitude = gps.getLongitude();
 
-                                Toast.makeText(getApplicationContext(), "Latitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                double SPMinLat = 34.4118550;
+                                double SPMaxLat = 34.4127620;
+                                double SPMinLong = -119.8486510;
+                                double SPMaxLong = -119.8478160;
+
+                                double CSMinLat = 34.413588;
+                                double CSMaxLat = 34.413982;
+                                double CSMinLong = -119.841907;
+                                double CSMaxLong = -119.840966;
+
+                                //storke tower
+                                //check if within latitude bounds
+                                if ((SPMinLat <= latitude) && (latitude <= SPMaxLat)){
+                                    //then check if within longitude bounds
+                                    if ((SPMinLong <= longitude) && (longitude <= SPMaxLong)){
+                                        //if within lat and long bounds, toast coordinates
+                                        Toast.makeText(getApplicationContext(), "STORKE TOWER!!\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    //if within latitude bounds, but not in longitude bounds
+                                    else{
+                                        //error message
+                                        Toast.makeText(getApplicationContext(), "Not in Storke Plaza\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                //HFH CSIL
+                                //check if within latitude bounds
+                                else if ((CSMinLat < latitude) && (latitude < CSMaxLat)){
+                                    //then check if within longitude bounds
+                                    if ((CSMinLong < longitude) && (longitude < CSMaxLong)){
+                                        //if within lat and long bounds, toast coordinates
+                                        Toast.makeText(getApplicationContext(), "CSIL!!!\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    //if within latitude bounds, but not in longitude bounds
+                                    else{
+                                        //error message
+                                        Toast.makeText(getApplicationContext(), "Not in CSIL\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                else if ((34.4133517 < latitude) && (latitude < 34.4174040)){
+                                    if ((-119.8620048 < longitude) && (longitude < -119.8601411)){
+                                        Toast.makeText(getApplicationContext(), "@HOME\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(), "Kind of @HOME\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                //not within either latitude bounds
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Not entering if statements\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                }
                             }
                             else{ gps.showSettingsAlert(); }
 
                             captureButton.setText("Go Back");
+                            gps.stopUsingGPS();
                         }
 
                         //change to Preview mode
                         else if(captureButton.getText() == "Go Back") {
-                            finish();
+                            //finish();
+                            theCamera.startPreview();
+                            captureButton.setText("Take Picture");
                         }
                     }
                 }
