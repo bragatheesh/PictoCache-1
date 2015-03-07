@@ -26,6 +26,10 @@
             android:name=".MainActivity"
             android:label="MainActivity">
         </activity>
+        <activity
+            android:name="com.ece150.bw.ece150251homework2.InformationScreen"
+            android:label="InformationScreen">
+        </activity>
     </application>
 
 </manifest>

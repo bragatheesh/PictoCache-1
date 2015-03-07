@@ -1,6 +1,7 @@
 package com.ece150.bw.ece150251homework2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -25,6 +26,8 @@ public class MainActivity extends Activity {
     CameraPreview viewFinder;
     private final static String STORETEXT="coordinates.txt";
     GPSLocation gps;
+    double latitude;
+    double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,29 +66,20 @@ public class MainActivity extends Activity {
 
                             gps = new GPSLocation(MainActivity.this);
                             if (gps.canGetLocation()){
-                                double latitude = gps.getLatitude();
-                                double longitude = gps.getLongitude();
-                                try {
-                                    OutputStreamWriter out = new OutputStreamWriter(openFileOutput(STORETEXT, 0));
+                                latitude = gps.getLatitude();
+                                longitude = gps.getLongitude();
 
-                                    out.write(String.valueOf(latitude) + String.valueOf(longitude));
-                                    out.close();
-                                }
-                                catch (Throwable t) {
-
-                                    Toast.makeText(getApplicationContext(), "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
-
-                                }
-                                Toast.makeText(getApplicationContext(), "Latitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Latitude: "
+                                        + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show(); //use this to write to the text file
                             }
                             else{ gps.showSettingsAlert(); }
 
-                            captureButton.setText("Go Back");
+                            captureButton.setText("Enter Information");
                         }
 
                         //change to Preview mode
-                        else if(captureButton.getText() == "Go Back") {
-                            finish();
+                        else if(captureButton.getText() == "Enter Information") {
+                            startActivityForResult(new Intent(MainActivity.this, InformationScreen.class),1);
                         }
                     }
                 }
@@ -134,5 +128,26 @@ public class MainActivity extends Activity {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode == RESULT_OK && requestCode == 1)
+        {
+            Bundle extras = data.getExtras();
+            try {
+                OutputStreamWriter out = new OutputStreamWriter(openFileOutput(STORETEXT, 0));
+
+                out.write("Name: " + extras.getString("name") + "\n" + "Landmark: " + extras.getString("landmark") + "\n" + "Comments: " + extras.getString("comments") +
+                        "\n" + String.valueOf(latitude) + ", " + String.valueOf(longitude) );
+                out.close();
+            }
+            catch (Throwable t) {
+
+                Toast.makeText(getApplicationContext(), "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
+
+            }
+
+        }
     }
 }
