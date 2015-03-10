@@ -78,12 +78,12 @@ public class MainActivity extends Activity {
                                 gps.showSettingsAlert();
                             }
 
-                            captureButton.setText("Enter Information");
+                            captureButton.setText("Check Cache");
                         }
 
                         //change to Preview mode
-                        else if (captureButton.getText() == "Enter Information") {
-                            startActivityForResult(new Intent(MainActivity.this, InformationScreen.class), 1);
+                        else if (captureButton.getText() == "Check Cache") {
+                            //startActivityForResult(new Intent(MainActivity.this, InformationScreen.class), 1);
                             //get current coordinates
                             double latitude = gps.getLatitude();
                             double longitude = gps.getLongitude();
@@ -105,6 +105,7 @@ public class MainActivity extends Activity {
                                 if ((SPMinLong <= longitude) && (longitude <= SPMaxLong)) {
                                     //if within lat and long bounds, toast coordinates
                                     Toast.makeText(getApplicationContext(), "STORKE TOWER!!\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    startActivityForResult(new Intent(MainActivity.this, InformationScreen.class), 1);
                                 }
 
                                 //if within latitude bounds, but not in longitude bounds
@@ -121,6 +122,7 @@ public class MainActivity extends Activity {
                                 if ((CSMinLong < longitude) && (longitude < CSMaxLong)) {
                                     //if within lat and long bounds, toast coordinates
                                     Toast.makeText(getApplicationContext(), "CSIL!!!\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    startActivityForResult(new Intent(MainActivity.this, InformationScreen.class), 1);
                                 }
 
                                 //if within latitude bounds, but not in longitude bounds
@@ -131,6 +133,7 @@ public class MainActivity extends Activity {
                             } else if ((34.4133517 < latitude) && (latitude < 34.4174040)) {
                                 if ((-119.8620048 < longitude) && (longitude < -119.8601411)) {
                                     Toast.makeText(getApplicationContext(), "@HOME\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                    startActivityForResult(new Intent(MainActivity.this, InformationScreen.class), 1);
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Kind of @HOME\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
                                 }
