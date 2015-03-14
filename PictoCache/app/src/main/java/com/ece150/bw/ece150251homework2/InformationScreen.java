@@ -11,14 +11,17 @@ package com.ece150.bw.ece150251homework2;
  * Created by Bragatheesh on 3/6/2015.
  */
 public class InformationScreen extends Activity {
-    EditText name = (EditText) findViewById(R.id.edit_name);
-    EditText landmark = (EditText) findViewById(R.id.edit_landmark);
-    EditText comments = (EditText) findViewById(R.id.edit_comments);
-    Button done = (Button) findViewById(R.id.button_done);
     protected void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information_screen);
+
+        final EditText name = (EditText) findViewById(R.id.edit_name);
+        final EditText landmark = (EditText) findViewById(R.id.edit_landmark);
+        final EditText comments = (EditText) findViewById(R.id.edit_comments);
+        Button done = (Button) findViewById(R.id.button_done);
+
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
