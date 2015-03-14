@@ -133,6 +133,14 @@ public class FeatureDetector {
  * -- "PyramidAdaptedFeatureDetector") + feature detector name (see above), for
  * example: <code>"GridFAST"</code>, <code>"PyramidSTAR"</code>.</p>
  *
+ * <p>Note: When using the SIFT and SURF detector types be sure to add the
+ * following lines to your code</p>
+ * <ul>
+ *   <li> Add an extra include: "#include <opencv2/nonfree/nonfree.hpp>"
+ *   <li> Add an initialisation function at the start of your code:
+ * "initModules_nonfree();"
+ * </ul>
+ *
  * @param detectorType Feature detector type.
  *
  * @see <a href="http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_feature_detectors.html#featuredetector-create">org.opencv.features2d.FeatureDetector.create</a>

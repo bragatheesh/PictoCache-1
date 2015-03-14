@@ -56,6 +56,7 @@ public class Highgui {
             CV_CAP_PROP_ROLL = 35,
             CV_CAP_PROP_IRIS = 36,
             CV_CAP_PROP_SETTINGS = 37,
+            CV_CAP_PROP_BUFFERSIZE = 38,
             CV_CAP_PROP_AUTOGRAB = 1024,
             CV_CAP_PROP_PREVIEW_FORMAT = 1026,
             CV_CAP_PROP_XI_DOWNSAMPLING = 400,

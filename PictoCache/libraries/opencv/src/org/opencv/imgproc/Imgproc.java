@@ -6440,7 +6440,7 @@ public class Imgproc {
  * <p>The function computes and returns the <em>ksize x 1</em> matrix of Gaussian
  * filter coefficients:</p>
  *
- * <p><em>G_i= alpha *e^(-(i-(ksize -1)/2)^2/(2* sigma)^2),</em></p>
+ * <p><em>G_i= alpha *e^(-(i-(ksize -1)/2)^2/(2* sigma^2)),</em></p>
  *
  * <p>where <em>i=0..ksize-1</em> and <em>alpha</em> is the scale factor chosen so
  * that <em>sum_i G_i=1</em>.</p>
@@ -6478,7 +6478,7 @@ public class Imgproc {
  * <p>The function computes and returns the <em>ksize x 1</em> matrix of Gaussian
  * filter coefficients:</p>
  *
- * <p><em>G_i= alpha *e^(-(i-(ksize -1)/2)^2/(2* sigma)^2),</em></p>
+ * <p><em>G_i= alpha *e^(-(i-(ksize -1)/2)^2/(2* sigma^2)),</em></p>
  *
  * <p>where <em>i=0..ksize-1</em> and <em>alpha</em> is the scale factor chosen so
  * that <em>sum_i G_i=1</em>.</p>
