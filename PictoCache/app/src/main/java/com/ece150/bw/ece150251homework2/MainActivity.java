@@ -49,7 +49,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private Camera theCamera;
-    public Bitmap somebmp, storke, csil;
+    public Bitmap somebmp, storke, csil, anotherBmp;
     Matrix matrix = new Matrix();
     FrameLayout preview;
     ImageView picCaptured, baseImage;
@@ -277,7 +277,9 @@ public class MainActivity extends Activity {
                 somebmp = Bitmap.createBitmap(somebmp, 0, 0, somebmp.getWidth(), somebmp.getHeight(), matrix, true);
                 Log.i("takenPicture", somebmp.getConfig().toString());
 
-                picCaptured.setImageBitmap(somebmp);
+                anotherBmp = somebmp;
+
+                picCaptured.setImageBitmap(anotherBmp);
                 preview.addView(picCaptured);
 
             } catch (Exception e) {
@@ -362,6 +364,7 @@ public class MainActivity extends Activity {
             }
 
         }
+        finish();
     }
 
     /* Image Comparison stuff */

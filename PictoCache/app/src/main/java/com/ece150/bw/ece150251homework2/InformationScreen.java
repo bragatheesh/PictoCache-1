@@ -25,15 +25,19 @@ public class InformationScreen extends Activity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Bundle dataBundle = new Bundle();
-                dataBundle.putString("name",name.getText().toString());
-                dataBundle.putString("landmark", landmark.getText().toString());
-                dataBundle.putString("comments", comments.getText().toString());
-                Intent intent = getIntent();
-                intent.putExtras(dataBundle);
-                setResult(RESULT_OK,intent);
-                finish();
+                try {
+                    Bundle dataBundle = new Bundle();
+                    dataBundle.putString("name", name.getText().toString());
+                    dataBundle.putString("landmark", landmark.getText().toString());
+                    dataBundle.putString("comments", comments.getText().toString());
+                    Intent intent = getIntent();
+                    intent.putExtras(dataBundle);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
