@@ -1,28 +1,22 @@
 package com.ece150.bw.ece150251homework2;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
@@ -30,17 +24,14 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfDMatch;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfKeyPoint;
-import org.opencv.core.Scalar;
 import org.opencv.features2d.DMatch;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
-import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.OutputStreamWriter;
@@ -49,7 +40,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private Camera theCamera;
-    public Bitmap somebmp, storke, csil, anotherBmp;
+    public Bitmap somebmp, storke, csil, anotherBmp, sampleBmp;
     Matrix matrix = new Matrix();
     FrameLayout preview;
     ImageView picCaptured, baseImage;
@@ -107,6 +98,7 @@ public class MainActivity extends Activity {
 
         storke = BitmapFactory.decodeResource(getResources(), R.drawable.storke);
         csil = BitmapFactory.decodeResource(getResources(), R.drawable.csil);
+        sampleBmp = BitmapFactory.decodeResource(getResources(), R.drawable.sample);
 
         // Create our Preview view and set it as the content of our activity.
         viewFinder = new CameraPreview(this, theCamera);
@@ -153,13 +145,6 @@ public class MainActivity extends Activity {
                                 Thread.currentThread().interrupt();
                             }
 
-                            //get GPS coordinates
-                            //gps = new GPSLocation(MainActivity.this);
-                            //if (gps.canGetLocation()){
-                            //get current coordinates
-                            //double latitude = gps.getLatitude();
-                            //double longitude = gps.getLongitude();
-
                             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
                                 latitude = location.getLatitude();
@@ -174,6 +159,7 @@ public class MainActivity extends Activity {
                                     Toast.makeText(getApplicationContext(), "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
                                 }
 
+                                // Storke and CSIL coordinates
                                 double SPMinLat = 34.4118550;
                                 double SPMaxLat = 34.4127620;
                                 double SPMinLong = -119.8486510;
@@ -196,7 +182,7 @@ public class MainActivity extends Activity {
                                         //if within lat and long bounds, toast coordinates
                                         Toast.makeText(getApplicationContext(), "STORKE TOWER!!\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
                                         similarity = compare(storke, somebmp, look_storke, look_csil);
-                                        if (similarity >= 0 && similarity <= 20000) {
+                                        if (similarity >= 0) {
                                             isMatch = betterCompare(storke, somebmp, look_storke, look_csil);
                                         }
                                         if (isMatch) {
@@ -219,7 +205,7 @@ public class MainActivity extends Activity {
                                         //if within lat and long bounds, toast coordinates
                                         Toast.makeText(getApplicationContext(), "CSIL!!!\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
                                         similarity = compare(csil, somebmp, look_storke, look_csil);
-                                        if (similarity >= 0 && similarity <= 20000) {
+                                        if (similarity >= 0) {
                                             isMatch = betterCompare(csil, somebmp, look_storke, look_csil);
                                         }
                                         if (isMatch) {
@@ -232,15 +218,7 @@ public class MainActivity extends Activity {
                                         //error message
                                         Toast.makeText(getApplicationContext(), "Not in CSIL\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
                                     }
-                                } else if ((34.415202 < latitude) && (latitude < 34.415604)) {
-                                    if ((-119.860501 < longitude) && (longitude < -119.859948)) {
-                                        Toast.makeText(getApplicationContext(), "@HOME\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
-                                        startActivityForResult(new Intent(MainActivity.this, InformationScreen.class), 1);
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "Kind of @HOME\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
-                                    }
                                 }
-
                                 //not within either latitude bounds
                                 else {
                                     Toast.makeText(getApplicationContext(), "Not entering if statements\nLatitude: " + latitude + "; Longitude: " + longitude, Toast.LENGTH_SHORT).show();
@@ -377,7 +355,7 @@ public class MainActivity extends Activity {
             if (isStorke) {
                 baseBmp = BitmapFactory.decodeResource(getResources(), R.drawable.storke);
             }
-            else {
+            else if(isCsil) {
                 baseBmp = BitmapFactory.decodeResource(getResources(), R.drawable.csil);
             }
         }
@@ -387,6 +365,8 @@ public class MainActivity extends Activity {
             if (baseBmp.getWidth() != compBmp.getWidth()) {
                 compBmp = Bitmap.createScaledBitmap(compBmp, baseBmp.getWidth(), baseBmp.getHeight(), true);
             }
+
+            // Resize the images to a standard size
             //baseBmp = Bitmap.createScaledBitmap(baseBmp, 100, 100, true);
             //compBmp = Bitmap.createScaledBitmap(compBmp, 100, 100, true);
 
@@ -425,7 +405,6 @@ public class MainActivity extends Activity {
             compHist.convertTo(compHist, CvType.CV_32F);
             // Do the histogram comparing
             result = Imgproc.compareHist(baseHist, compHist, Imgproc.CV_COMP_CHISQR);
-            //text.setText("Similarity: " + Double.toString(result));
             Log.d("ImgCompare", "Coefficient of Similarity: " + result);
             if (result == 0) {
                 Toast.makeText(MainActivity.this, "The Pictures are exactly alike", Toast.LENGTH_SHORT).show();
@@ -460,8 +439,7 @@ public class MainActivity extends Activity {
                 }
             }
             // Set up the Mats and images again
-            //baseBmp = baseBmp.copy(Bitmap.Config.ARGB_8888, true);
-            //compBmp = compBmp.copy(Bitmap.Config.ARGB_8888, true);
+
             baseMat = new Mat();
             compMat = new Mat();
             Utils.bitmapToMat(baseBmp, baseMat);
@@ -512,7 +490,7 @@ public class MainActivity extends Activity {
 
         // What happens after the compare function.
         try {
-            /* In case of wanting to draw out the matches
+            /* In case of wanting to draw out the matches *//*
             Mat newMat = new Mat();
             MatOfByte drawnMatches = new MatOfByte();
             Features2d.drawMatches(baseMat, baseKeypoints, compMat, compKeypoints, matches, newMat, new Scalar(0, 255, 0), new Scalar(255, 0, 0), drawnMatches, Features2d.NOT_DRAW_SINGLE_POINTS);
@@ -524,13 +502,10 @@ public class MainActivity extends Activity {
             final int numMatches = final_matches_list.size();
             if (final_matches_list.size() > MIN_MATCHES) {
                 Toast.makeText(MainActivity.this, "There are " + final_matches_list.size() + " matches. Match = True", Toast.LENGTH_SHORT).show();
-                //text.setText(final_matches_list.size() + " matches. It's probably a match");
                 return true;
             }
             else {
                 Toast.makeText(MainActivity.this, "There are " + final_matches_list.size() + " matches. Match = False", Toast.LENGTH_SHORT).show();
-
-                //text.setText(final_matches_list.size() + " matches. It's probably NOT a match");
                 return false;
             }
         }
